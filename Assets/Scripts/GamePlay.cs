@@ -13,12 +13,17 @@ public class GamePlay : MonoBehaviour
 	static string AnswerStringFormat1 = "<color=#fee300ff>(a) </color>{0}";
 	static string AnswerStringFormat2 = "<color=#fee300ff>(b) </color>{0}";
 	static string AnswerStringFormat3 = "<color=#fee300ff>(c) </color>{0}";
+	static string CorrectAnswersCounterStrFormat = "{0} / {1}";
 
+	static int AllQuestions = 30;
+
+	public Text m_txtAnswerCounter = null;
 
 	public Text m_txtQuestion = null;
 	public List<Text> m_txtAnswers = new List<Text>();
 
 	public List<Apart> m_aprts = new List<Apart>();
+
 
 	TriviaDatabaseAccess triviaData;
 	private List<TriviaAnswer> answers;
@@ -38,6 +43,8 @@ public class GamePlay : MonoBehaviour
 
 		m_correctAnswers = 1;
 		_updateApartment(m_correctAnswers);
+
+		_updateAsnwersCounter(m_correctAnswers);
 	}
 
 
@@ -80,12 +87,12 @@ public class GamePlay : MonoBehaviour
 
 		isAnswered = true;
 
-		m_correctAnswers++;
-		_updateApartment(m_correctAnswers);
-
 		if (answers[btnPressed].isTrue) // Test if button pressed number is the correct button number
 		{
 			//You got the Question Right
+			m_correctAnswers++;
+			_updateApartment(m_correctAnswers);
+			_updateAsnwersCounter(m_correctAnswers);
 		}
 		else
 		{
@@ -141,6 +148,10 @@ public class GamePlay : MonoBehaviour
 		}
 	}
 
+	void _updateAsnwersCounter(int _correctAnswer)
+	{
+		m_txtAnswerCounter.text = string.Format(CorrectAnswersCounterStrFormat, (_correctAnswer - 1), AllQuestions);
+	}
 
 	#region Public Methods
 

@@ -24,6 +24,13 @@ public class GamePlay : MonoBehaviour
 
 	public List<Apart> m_aprts = new List<Apart>();
 
+	public RectTransform m_rectGameOverScrn = null;
+	
+	public AudioClip m_audioClipRight = null;
+	public AudioClip m_audioClipWrong = null;
+
+	public AudioSource m_audioSourceGame = null;
+
 
 	TriviaDatabaseAccess triviaData;
 	private List<TriviaAnswer> answers;
@@ -45,6 +52,11 @@ public class GamePlay : MonoBehaviour
 		_updateApartment(m_correctAnswers);
 
 		_updateAsnwersCounter(m_correctAnswers);
+	}
+
+	void OnEnable()
+	{
+		m_rectGameOverScrn.gameObject.SetActive(false);
 	}
 
 
@@ -93,10 +105,19 @@ public class GamePlay : MonoBehaviour
 			m_correctAnswers++;
 			_updateApartment(m_correctAnswers);
 			_updateAsnwersCounter(m_correctAnswers);
+
+			m_audioSourceGame.clip = m_audioClipRight;
+			m_audioSourceGame.loop = false;
+			m_audioSourceGame.Play();
 		}
 		else
 		{
 			//You got the Question Wrong
+			m_rectGameOverScrn.gameObject.SetActive(true);
+			m_audioSourceGame.clip = m_audioClipWrong;
+			m_audioSourceGame.loop = false;
+			m_audioSourceGame.Play();
+			return;
 		}
 
 		if (triviaData.trivia.Count > 1) // checks to see if that was the last one
@@ -168,6 +189,21 @@ public class GamePlay : MonoBehaviour
 	public void BtnAnswer2()
 	{
 		SubmitAnswer(2);
+	}
+
+
+	public void BtnReply()
+	{
+		initTriviaData();
+
+		initUIs();
+
+		m_correctAnswers = 1;
+		_updateApartment(m_correctAnswers);
+
+		_updateAsnwersCounter(m_correctAnswers);
+
+		m_rectGameOverScrn.gameObject.SetActive(false);
 	}
 	#endregion Public Methods
 }

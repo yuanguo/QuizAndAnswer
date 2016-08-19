@@ -17,6 +17,8 @@ public class GamePlay : MonoBehaviour
 
 	static int AllQuestions = 30;
 
+	public GameLogic m_gameLogic = null;
+
 	public Text m_txtAnswerCounter = null;
 
 	public Text m_txtQuestion = null;
@@ -24,12 +26,13 @@ public class GamePlay : MonoBehaviour
 
 	public List<Apart> m_aprts = new List<Apart>();
 
-	public RectTransform m_rectGameOverScrn = null;
-	
 	public AudioClip m_audioClipRight = null;
 	public AudioClip m_audioClipWrong = null;
 
 	public AudioSource m_audioSourceGame = null;
+
+	public AudioClip m_bgSoundClip = null;
+	public AudioSource m_bgSoundSource = null;
 
 
 	TriviaDatabaseAccess triviaData;
@@ -44,6 +47,10 @@ public class GamePlay : MonoBehaviour
 
 	private void Start()
 	{
+	}
+
+	void OnEnable()
+	{
 		initTriviaData();
 
 		initUIs();
@@ -52,11 +59,10 @@ public class GamePlay : MonoBehaviour
 		_updateApartment(m_correctAnswers);
 
 		_updateAsnwersCounter(m_correctAnswers);
-	}
 
-	void OnEnable()
-	{
-		m_rectGameOverScrn.gameObject.SetActive(false);
+		m_bgSoundSource.clip = m_bgSoundClip;
+		m_bgSoundSource.loop = true;
+		m_bgSoundSource.Play();
 	}
 
 
@@ -113,7 +119,7 @@ public class GamePlay : MonoBehaviour
 		else
 		{
 			//You got the Question Wrong
-			m_rectGameOverScrn.gameObject.SetActive(true);
+			m_gameLogic.PlayGameOver();
 			m_audioSourceGame.clip = m_audioClipWrong;
 			m_audioSourceGame.loop = false;
 			m_audioSourceGame.Play();
@@ -203,7 +209,7 @@ public class GamePlay : MonoBehaviour
 
 		_updateAsnwersCounter(m_correctAnswers);
 
-		m_rectGameOverScrn.gameObject.SetActive(false);
+		m_gameLogic.PlayGameScene();
 	}
 	#endregion Public Methods
 }

@@ -11,6 +11,7 @@ public class GameLogic : MonoBehaviour
 
 	void OnEnable()
 	{
+		PlayFirstScene();
 	}
 
 
